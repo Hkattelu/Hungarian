@@ -16,19 +16,45 @@ public class Hungarian {
 	 */
 	public int[][] hungarian(int[][] data){
 		int[][] matrix = data;
+		int linesNeeded = Math.min(matrix.length,matrix[0].length);
 		
-		// Subtract each row by the minimum element in that row.
+		// Step 1: Subtract each row by the minimum element in that row.
 		matrix = rowSubtract(matrix);
 		matrix = transpose(matrix);
 		
-		// Subtract each column by the minimum element in that column.
+		// Step 2: Subtract each column by the minimum element in that column.
+		// NOTE: Applying row subtract on the transpose is the same operation
 		matrix = rowSubtract(matrix);
 		matrix = transpose(matrix);
 		
+		// Step 3: Try to cover all 0's using linesNeeded lines. If this fails, pivot
+		// if it works, then proceed to Step 5.
 		
 		
 		return null;
 		
+	}
+	
+	/**
+	 * Given a matrix and the assignment solution, compute the minimum
+	 * cost of the solution.
+	 * @param matrix The matrix of costs
+	 * @param assignment The assignment solution
+	 * @return The cost of the optimal assignments in matrix
+	 */
+	public int hungarian_minCost(int[][] matrix, int[][] assignment){
+	  int cost = 0;
+	  
+	  for(int i=0;i<matrix.length;i++){
+		  for(int j=0;j<matrix[0].length;j++){
+			  //Add to the running if i was assigned to j in the
+			  //assignment matrix.
+			  if(assignment[i][j] == 1)
+				  cost += matrix[i][j]; 
+		  }
+	  }
+	  
+	  return cost;
 	}
 	
 	/**
@@ -37,7 +63,7 @@ public class Hungarian {
 	 * @return the minimum element
 	 */
 	private int arrayMin(int[] array){
-		
+		//Return Integer.MAX if the array is empty.
 		int min = Integer.MAX_VALUE;
 		
 		for(int i=0;i < array.length;i++){
@@ -50,7 +76,7 @@ public class Hungarian {
 	
 	/**
 	 * Subtract each row in a matrix by the lowest 
-	 * element in that row. Corresponds to step 1 in 
+	 * element in that row. Corresponds to step 1 & 2 in 
 	 * the Hungarian algorithm
 	 * @param matrix : the matrix to operate on
 	 * @return the matrix after subtractions
@@ -63,6 +89,7 @@ public class Hungarian {
 			int row_min = arrayMin(matrix[i]);
 				
 			for(int j=0; j < matrix[i].length;j++){
+				// Subtract each element by the row minimum.
 				matrix[i][j] = matrix[i][j] - row_min;
 			}
 		}
@@ -84,5 +111,44 @@ public class Hungarian {
 		}
 		
 		return transposed;
+	}
+	
+	/**
+	 * "Cover" up the matrix with the minimum number of lines
+	 * needed in order to cover all of the 0's. A covered element
+	 * is denoted by a 2 in its place. Corresponds to hungarian
+	 * algorithm step 3.
+	 * @param matrix the matrix to cover
+	 * @return the covered matrix
+	 */
+	private int[][] hungarian_Cover(int[][] matrix){
+		return null;
+	}
+	
+	/**
+	 * Return whether or not the matrix is fully covered. A
+	 * matrix is fully covered if every element is a 2. Corresponds
+	 * to hungarian algorithm step 3.
+	 * @param matrix the matrix to check
+	 * @return True if it is fully covered. False otherwise.
+	 */
+	private boolean hungarian_isCovered(int[][] matrix){
+		return true;
+	}
+	
+	/**
+	 * "Pivot" the matrix if the solution has not been found. To do so,
+	 *  we subtract all uncovered elements by the lowest element in their
+	 *  respective columns. We also add this value onto each element that
+	 *  has been "Double covered". Corresponds to step 4 in the hungarian algorithm.
+	 * @param matrix The matrix to pivot
+	 */
+	private void hungarian_pivot(int[][] matrix){
+		return;
+	}
+	
+	/* Test Cases */
+	public static void main(String[] args){
+		
 	}
 }
