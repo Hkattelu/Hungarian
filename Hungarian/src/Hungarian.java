@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /*
  * A class that can perform the Hungarian algorithm
  * on a set of data to solve an assignment problem.
@@ -20,15 +22,31 @@ public class Hungarian {
 		
 		// Step 1: Subtract each row by the minimum element in that row.
 		matrix = rowSubtract(matrix);
-		matrix = transpose(matrix);
 		
 		// Step 2: Subtract each column by the minimum element in that column.
 		// NOTE: Applying row subtract on the transpose is the same operation
+		matrix = transpose(matrix);
 		matrix = rowSubtract(matrix);
 		matrix = transpose(matrix);
 		
 		// Step 3: Try to cover all 0's using linesNeeded lines. If this fails, pivot
 		// if it works, then proceed to Step 5.
+		char[][] matrixCover = hungarian_Cover(matrix);
+		
+		// Step 4: Pivot the matrix by subtracting each uncovered element by
+		// the minimum uncovered element of that column. Also add that amount
+		// to elements that have been "double covered". Go back to Step 3.
+		while(!hungarian_isCovered(matrixCover)){
+			hungarian_pivot(matrix);
+			matrixCover = hungarian_Cover(matrix);
+		}
+		
+		// Step 5: The matrix has now been "solved". Now we select a 0 from
+		// Each row such that each row and each column contains only one zero.
+		// Replace those zeroes with 1's and turn all other elements to 0's.
+		
+		
+		// Step 6: Return the solution matrix.
 		
 		
 		return null;
@@ -44,7 +62,6 @@ public class Hungarian {
 	 */
 	public int hungarian_minCost(int[][] matrix, int[][] assignment){
 	  int cost = 0;
-	  
 	  for(int i=0;i<matrix.length;i++){
 		  for(int j=0;j<matrix[0].length;j++){
 			  //Add to the running if i was assigned to j in the
@@ -76,12 +93,11 @@ public class Hungarian {
 	
 	/**
 	 * Subtract each row in a matrix by the lowest 
-	 * element in that row. Corresponds to step 1 & 2 in 
-	 * the Hungarian algorithm
+	 * element in that row. 
 	 * @param matrix : the matrix to operate on
 	 * @return the matrix after subtractions
 	 */
-	private int[][] rowSubtract(int[][] matrix){
+	public int[][] rowSubtract(int[][] matrix){
 		
 		// Subtract each row by the minimum element in that row.
 		for(int i=0;i < matrix.length;i++){
@@ -101,7 +117,7 @@ public class Hungarian {
 	 * @param matrix : the matrix to transpose
 	 * @return the transposed matrix
 	 */
-	private int[][] transpose(int[][] matrix){
+	public int[][] transpose(int[][] matrix){
 		int[][] transposed = new int[matrix[0].length][matrix.length];
 		
 		for(int i=0;i < matrix.length;i++){
@@ -116,13 +132,45 @@ public class Hungarian {
 	/**
 	 * "Cover" up the matrix with the minimum number of lines
 	 * needed in order to cover all of the 0's. A covered element
-	 * is denoted by a 2 in its place. Corresponds to hungarian
-	 * algorithm step 3.
+	 * is denoted by an x in its place. Double covered elements
+	 * are denoted by a y. Uncovered elements are denoted by z's.
+	 * Corresponds to hungarian algorithm step 3.
 	 * @param matrix the matrix to cover
-	 * @return the covered matrix
+	 * @return A matrix representing which elements have been covered.
 	 */
-	private int[][] hungarian_Cover(int[][] matrix){
-		return null;
+	private char[][] hungarian_Cover(int[][] matrix){
+		char[][] cover = new char[matrix.length][matrix[0].length];
+		for(int i = 0;i< matrix.length;i++){
+			for(int j = 0;j< matrix[i].length;j++){
+				if (matrix[i][j] == 0){
+					if(cover[i][j] == 'x'){
+						//If the element is covered, double cover it
+						cover[i][j] = 'y';
+					}else if(cover[i][j] == 'y'){
+					   // Do nothing if it is already double cover
+					   // Although this should'nt happen in the first place
+					} else{
+					   // Cover all elements in this row and column.
+					   for(int k = 0;k < matrix.length;k++){
+						   if(cover[k][j] != 'y')
+						    cover[k][j] = 'x';
+					   }
+					   for(int k = 0;k < matrix[i].length;k++){
+						   if(cover[k][j] != 'y')
+						    cover[i][k] = 'x';
+					   }
+					}
+				}else{
+				  if (cover[i][j] == 'x' || cover[i][j] == 'y'){
+				  }else{
+					  cover[i][j] = 'z';  
+				  }
+									  
+				}
+					
+			}
+		}
+		return cover;
 	}
 	
 	/**
@@ -132,7 +180,7 @@ public class Hungarian {
 	 * @param matrix the matrix to check
 	 * @return True if it is fully covered. False otherwise.
 	 */
-	private boolean hungarian_isCovered(int[][] matrix){
+	private boolean hungarian_isCovered(char[][] matrix){
 		return true;
 	}
 	
@@ -146,9 +194,8 @@ public class Hungarian {
 	private void hungarian_pivot(int[][] matrix){
 		return;
 	}
-	
-	/* Test Cases */
+
 	public static void main(String[] args){
-		
+
 	}
 }
