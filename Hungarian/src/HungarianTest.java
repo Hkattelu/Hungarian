@@ -23,15 +23,14 @@ public class HungarianTest {
 		assertEquals(Arrays.deepToString(test2),"[[0, 0, 2], [3, 0, 0], [0, 4, 2]]");
 	}
 	
+	/*
 	@Test
 	public void step3_test(){
 		Hungarian x = new Hungarian();
 		int[][] test3 = {{1,2,3},{7,5,4},{3,8,5}};
 	    test3 = x.rowSubtract(test3);
-		test3 = x.transpose(x.rowSubtract(x.transpose(test3)));
-		
-		
-	}
+		test3 = x.transpose(x.rowSubtract(x.transpose(test3)));		
+	} */
 	
 	@Test
 	public void minCost_test(){
@@ -41,6 +40,15 @@ public class HungarianTest {
 		assertEquals(x.hungarian_minCost(orig,sol),241);
 		int[][] sol2 = {{0,1,1},{1,0,1},{0,0,0}};
 		assertEquals(x.hungarian_minCost(orig, sol2), 90);
+	}
+	
+	@Test
+	public void isCovered_test(){
+		Hungarian x = new Hungarian();
+		char[][] cover = {{'x','y','x'},{'x','y','y'},{'x','x','y'}};
+		assertEquals(x.hungarian_isCovered(cover),true);
+		cover[2][2] = 'z';
+		assertEquals(x.hungarian_isCovered(cover),false);
 	}
 
 }

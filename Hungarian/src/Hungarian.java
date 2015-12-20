@@ -1,9 +1,12 @@
-import java.util.Arrays;
-
 /*
  * A class that can perform the Hungarian algorithm
  * on a set of data to solve an assignment problem.
+ * 
+ * @Author: Himanshu Kattelu
+ * @Version: 12/19/2015
  */
+
+import java.util.Arrays;
 
 public class Hungarian {
 
@@ -180,8 +183,15 @@ public class Hungarian {
 	 * @param matrix the matrix to check
 	 * @return True if it is fully covered. False otherwise.
 	 */
-	private boolean hungarian_isCovered(char[][] matrix){
-		return true;
+	public boolean hungarian_isCovered(char[][] matrix){
+        for(int i = 0;i< matrix.length;i++){
+        	for(int j = 0;j< matrix[i].length;j++){
+        		if(matrix[i][j] == 'z')
+        			return false;
+        	}
+        }
+        return true;
+
 	}
 	
 	/**
@@ -194,8 +204,15 @@ public class Hungarian {
 	private void hungarian_pivot(int[][] matrix){
 		return;
 	}
-
+	
+    /*
 	public static void main(String[] args){
-
+		Hungarian x = new Hungarian();
+		int[][] test2 = {{1,2,3},{7,5,4},{3,8,5}};
+	    test2 = x.rowSubtract(test2);
+		test2 = x.transpose(x.rowSubtract(x.transpose(test2)));
+		System.out.println(Arrays.deepToString(test2));
+		System.out.println(Arrays.deepToString(x.hungarian_Cover(test2)));
 	}
+	*/
 }
