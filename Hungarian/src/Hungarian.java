@@ -47,13 +47,8 @@ public class Hungarian {
 		// Step 5: The matrix has now been "solved". Now we select a 0 from
 		// Each row such that each row and each column contains only one zero.
 		// Replace those zeroes with 1's and turn all other elements to 0's.
-		
-		
-		// Step 6: Return the solution matrix.
-		
-		
-		return null;
-		
+		return hungarian_select(matrix);
+
 	}
 	
 	/**
@@ -203,6 +198,17 @@ public class Hungarian {
 	 */
 	private void hungarian_pivot(int[][] matrix){
 		return;
+	}
+	
+	/**
+	 * "Selects" elements from the the fully pivoted matrix. Essentially this
+	 *  returns a matrix with  a 1 in position i,j if worker i has been assigned
+	 *  to job j. All other elements will be 0.
+	 * @param coveredMatrix The fully pivoted matrix
+	 * @return The assignment matrix
+	 */
+	private int[][] hungarian_select(int[][] coveredMatrix){
+		return null;
 	}
 	
     /*
