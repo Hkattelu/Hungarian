@@ -50,5 +50,50 @@ public class HungarianTest {
 		cover[2][2] = 'z';
 		assertEquals(x.hungarian_isCovered(cover),false);
 	}
+	
+	@Test
+	public void selection_test1(){
+		// Simple Test
+		Hungarian x = new Hungarian();
+		int[][] matrix = {{0,1,1,1},{1,0,1,1},{1,1,0,1},{1,1,1,0}};
+		int[][] selection = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+		assertEquals(selection,x.hungarian_select(matrix));
+	}
+	
+	@Test
+	public void selection_test2(){
+		// Switched up numbers,harder
+		Hungarian x = new Hungarian();
+		int[][] matrix = {{0,1,1,1},{0,1,1,0},{1,1,0,1},{1,0,0,0}};
+		int[][] selection = {{1,0,0,0},{0,0,0,1},{0,0,1,0},{0,1,0,0}};
+		assertEquals(selection,x.hungarian_select(matrix));
+	}
+	
+	@Test
+	public void selection_test3(){
+		// Switched up more, harder than 2
+		Hungarian x = new Hungarian();
+		int[][] matrix = {{1,1,1,0},{0,1,1,0},{1,1,0,1},{1,0,1,0}};
+		int[][] selection = {{0,0,0,1},{1,0,0,0},{0,0,1,0},{0,1,0,0}};
+		assertEquals(selection,x.hungarian_select(matrix));
+	}
+	
+	@Test
+	public void selection_test4(){
+		// # rows > # cols
+		Hungarian x = new Hungarian();
+		int[][] matrix = {{1,1,1,0},{0,1,1,0},{1,1,0,1}};
+		int[][] selection = {{0,0,0,1},{1,0,0,0},{0,0,1,0}};
+		assertEquals(selection,x.hungarian_select(matrix));
+	}
+	
+	@Test
+	public void selection_test5(){
+		// # cols > # rows
+		Hungarian x = new Hungarian();
+		int[][] matrix = {{1,0,1},{0,1,1},{1,1,0},{1,0,1}};
+		int[][] selection = {{0,1,0},{1,0,0},{0,0,1},{0,0,0}};
+		assertEquals(selection,x.hungarian_select(matrix));
+	}
 
 }

@@ -207,7 +207,7 @@ public class Hungarian {
 	 * @param pivotedMatrix The fully pivoted matrix
 	 * @return The assignment matrix
 	 */
-	private int[][] hungarian_select(int[][] pivotedMatrix){
+	public int[][] hungarian_select(int[][] pivotedMatrix){
 		
 	   int numCols = pivotedMatrix.length;
 	   int numRows = pivotedMatrix[0].length;
