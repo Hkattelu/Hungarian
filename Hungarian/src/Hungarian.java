@@ -212,42 +212,42 @@ public class Hungarian {
 	   int numCols = pivotedMatrix.length;
 	   int numRows = pivotedMatrix[0].length;
 	   int[][] selection = new int[numCols][numRows];
-	   int numberToAssign = Math.min(numCols, numRows);
-	   int[] assignments = new int[numberToAssign];
-	   
-	   boolean transposed = false;
-	   
-	   // Determine whether there are more columns or rows. 
-	   // Take matrix transpose if numCols < numRows
-	   int numToSelect;
-	   if(numberToAssign == numRows)
-		   numToSelect = numRows;
-	   else{
-		   pivotedMatrix = transpose(pivotedMatrix);
-		   transposed = true;
-		   numToSelect = numCols;
+
+	   int numToSelect = numCols;
+	   int[] assignments = new int[numToSelect];
+	  
+	   for(int i=0;i<numToSelect;i++){
+		   assignments[i] = -1;
 	   }
 		  
 	   for(int i = 0;i < numToSelect;i++){
 		   int index = containsOneZero(pivotedMatrix[i]);
 	       
 		   if (index >= 0){
-			   selection[i][index]= 1;
-			   assignments[i] = index;
+			   boolean canSelect = true;
+			   for(int j=0; j<assignments.length;j++){
+				   if(assignments[j] == index)
+					   canSelect = false;
+			   }
+			   if(canSelect){
+			     selection[i][index]= 1;
+			     assignments[i] = index;
+			   }
+			   
 		   }else if (index == -1){
-			   return null;
+			   //Do nothing
 		   }else if (index == -2){
 			   index = getAvailableZeroIndex(assignments,pivotedMatrix[i]);
-			   if(index == -1)
-				   return null;
-			   selection[i][index] = 1;
-			   assignments[i] = index;
+			   if(index == -1){
+			   	   return null;
+			   }else{
+				   selection[i][index] = 1;
+				   assignments[i] = index;
+			   }
 		   }
 		   
 	   }
-	   
-	   if(transposed)
-		   return transpose(selection);
+
 	   return selection;
 		
 	}

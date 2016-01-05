@@ -84,6 +84,7 @@ public class HungarianTest {
 		Hungarian x = new Hungarian();
 		int[][] matrix = {{1,1,1,0},{0,1,1,0},{1,1,0,1}};
 		int[][] selection = {{0,0,0,1},{1,0,0,0},{0,0,1,0}};
+		System.out.println(Arrays.deepToString(x.hungarian_select(matrix)));
 		assertEquals(selection,x.hungarian_select(matrix));
 	}
 	
@@ -93,6 +94,8 @@ public class HungarianTest {
 		Hungarian x = new Hungarian();
 		int[][] matrix = {{1,0,1},{0,1,1},{1,1,0},{1,0,1}};
 		int[][] selection = {{0,1,0},{1,0,0},{0,0,1},{0,0,0}};
+		System.out.println(Arrays.deepToString(x.hungarian_select(matrix)));
+
 		assertEquals(selection,x.hungarian_select(matrix));
 	}
 
