@@ -19,7 +19,7 @@ public class Hungarian {
 	 * columns in data. All other elements in the returned matrix will be 0.
 	 * 
 	 */
-	public int[][] hungarian(int[][] data){
+	public int[][] hungarian_algorithm(int[][] data){
 		int[][] matrix = data;
 		int linesNeeded = Math.min(matrix.length,matrix[0].length);
 		
@@ -34,13 +34,13 @@ public class Hungarian {
 		
 		// Step 3: Try to cover all 0's using linesNeeded lines. If this fails, pivot
 		// if it works, then proceed to Step 5.
-		char[][] matrixCover = hungarian_Cover(matrix);
+		int[][] matrixCover = hungarian_Cover(matrix);
 		
 		// Step 4: Pivot the matrix by subtracting each uncovered element by
 		// the minimum uncovered element of that column. Also add that amount
 		// to elements that have been "double covered". Go back to Step 3.
 		while(!hungarian_isCovered(matrixCover)){
-			hungarian_pivot(matrix);
+			matrix = hungarian_pivot(matrix,matrixCover);
 			matrixCover = hungarian_Cover(matrix);
 		}
 		
@@ -78,6 +78,7 @@ public class Hungarian {
 	 * @return the minimum element
 	 */
 	private int arrayMin(int[] array){
+		//Helper method for step 1
 		//Return Integer.MAX if the array is empty.
 		int min = Integer.MAX_VALUE;
 		
@@ -96,7 +97,7 @@ public class Hungarian {
 	 * @return the matrix after subtractions
 	 */
 	public int[][] rowSubtract(int[][] matrix){
-		
+		//Helper method for step 1
 		// Subtract each row by the minimum element in that row.
 		for(int i=0;i < matrix.length;i++){
 			//Calculate the value of the minimum element in that array.
@@ -116,6 +117,7 @@ public class Hungarian {
 	 * @return the transposed matrix
 	 */
 	public int[][] transpose(int[][] matrix){
+		//Helper method
 		int[][] transposed = new int[matrix[0].length][matrix.length];
 		
 		for(int i=0;i < matrix.length;i++){
@@ -136,39 +138,25 @@ public class Hungarian {
 	 * @param matrix the matrix to cover
 	 * @return A matrix representing which elements have been covered.
 	 */
-	private char[][] hungarian_Cover(int[][] matrix){
+	private int[][] hungarian_Cover(int[][] matrix){
+		
 		char[][] cover = new char[matrix.length][matrix[0].length];
-		for(int i = 0;i< matrix.length;i++){
-			for(int j = 0;j< matrix[i].length;j++){
-				if (matrix[i][j] == 0){
-					if(cover[i][j] == 'x'){
-						//If the element is covered, double cover it
-						cover[i][j] = 'y';
-					}else if(cover[i][j] == 'y'){
-					   // Do nothing if it is already double cover
-					   // Although this should'nt happen in the first place
-					} else{
-					   // Cover all elements in this row and column.
-					   for(int k = 0;k < matrix.length;k++){
-						   if(cover[k][j] != 'y')
-						    cover[k][j] = 'x';
-					   }
-					   for(int k = 0;k < matrix[i].length;k++){
-						   if(cover[k][j] != 'y')
-						    cover[i][k] = 'x';
-					   }
-					}
-				}else{
-				  if (cover[i][j] == 'x' || cover[i][j] == 'y'){
-				  }else{
-					  cover[i][j] = 'z';  
-				  }
-									  
+		int[] rowLines = new int[matrix.length];
+		int[] colLines = new int[matrix[0].length];
+		
+		for(int i=0; i < cover.length; i++){
+			for(int j=0; j < cover[i].length; j++){
+				if(matrix[i][j] == 0 && rowLines[i] == 0 && colLines[j] == 0){
+					cover[i][j] = 'x';
+					rowLines[i] = 1;
+					colLines[j] = 1;
+				} else if(matrix[i][j] == 0){
+					cover[i][j] = 'y';
 				}
-					
 			}
 		}
-		return cover;
+		
+		return null;
 	}
 	
 	/**
@@ -178,10 +166,10 @@ public class Hungarian {
 	 * @param matrix the matrix to check
 	 * @return True if it is fully covered. False otherwise.
 	 */
-	public boolean hungarian_isCovered(char[][] matrix){
+	public boolean hungarian_isCovered(int[][] matrix){
         for(int i = 0;i< matrix.length;i++){
         	for(int j = 0;j< matrix[i].length;j++){
-        		if(matrix[i][j] == 'z')
+        		if(matrix[i][j] == 0)
         			return false;
         	}
         }
@@ -191,13 +179,36 @@ public class Hungarian {
 	
 	/**
 	 * "Pivot" the matrix if the solution has not been found. To do so,
-	 *  we subtract all uncovered elements by the lowest element in their
-	 *  respective columns. We also add this value onto each element that
+	 *  we subtract all uncovered elements by the lowest element in the
+	 *  matrix. We also add this value onto each element that
 	 *  has been "Double covered". Corresponds to step 4 in the hungarian algorithm.
 	 * @param matrix The matrix to pivot
+	 * @param cover The matrix representing how the lines covered the matrix elements
+	 * @return the pivoted matrix
 	 */
-	private void hungarian_pivot(int[][] matrix){
-		return;
+	public int[][] hungarian_pivot(int[][] matrix, int[][] cover){
+		
+		int minUncovered = Integer.MAX_VALUE;
+		//Find the minimum uncovered element
+		for(int i= 0;i < matrix.length;i++){
+			for(int j=0;j < matrix[i].length;j++){
+				if(cover[i][j] == 0)
+					minUncovered = Math.min(minUncovered, matrix[i][j]);
+			}
+		}
+		//Now subtract that element from all uncovered elements and add it to all double covered elements
+		for(int i= 0;i < matrix.length;i++){
+			for(int j=0;j < matrix[i].length;j++){
+				if(cover[i][j] == 0){
+					matrix[i][j] -= minUncovered;
+				}else if(cover[i][j] == 2){
+					matrix[i][j] += minUncovered;
+				}
+			}
+		}
+		
+		return matrix;
+		
 	}
 	
 	/**
@@ -259,7 +270,7 @@ public class Hungarian {
 	 * @return -2, if multiple zeroes, -1 if no zeroes, otherwise return the index of the zero.
 	 */
 	private int containsOneZero(int[] array){
-		
+		//Helper method for select
 		int index = -1;
 		boolean zeroFound = false;
 		
@@ -285,7 +296,7 @@ public class Hungarian {
 	 * @return the index of the first valid zero, -1 if no valid zeroes.
 	 */
 	private int getAvailableZeroIndex(int[] filledIndices, int[] array){
-		
+		//Helper method for select
 		boolean isAvailable = true;
 		
 		for(int i=0;i < array.length;i++){
@@ -307,14 +318,5 @@ public class Hungarian {
 		return -1;
 	}
 	
-    /*
-	public static void main(String[] args){
-		Hungarian x = new Hungarian();
-		int[][] test2 = {{1,2,3},{7,5,4},{3,8,5}};
-	    test2 = x.rowSubtract(test2);
-		test2 = x.transpose(x.rowSubtract(x.transpose(test2)));
-		System.out.println(Arrays.deepToString(test2));
-		System.out.println(Arrays.deepToString(x.hungarian_Cover(test2)));
-	}
-	*/
+
 }
