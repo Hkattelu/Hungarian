@@ -204,11 +204,107 @@ public class Hungarian {
 	 * "Selects" elements from the the fully pivoted matrix. Essentially this
 	 *  returns a matrix with  a 1 in position i,j if worker i has been assigned
 	 *  to job j. All other elements will be 0.
-	 * @param coveredMatrix The fully pivoted matrix
+	 * @param pivotedMatrix The fully pivoted matrix
 	 * @return The assignment matrix
 	 */
-	private int[][] hungarian_select(int[][] coveredMatrix){
-		return null;
+	private int[][] hungarian_select(int[][] pivotedMatrix){
+		
+	   int numCols = pivotedMatrix.length;
+	   int numRows = pivotedMatrix[0].length;
+	   int[][] selection = new int[numCols][numRows];
+	   int numberToAssign = Math.min(numCols, numRows);
+	   int[] assignments = new int[numberToAssign];
+	   
+	   boolean transposed = false;
+	   
+	   // Determine whether there are more columns or rows. 
+	   // Take matrix transpose if numCols < numRows
+	   int numToSelect;
+	   if(numberToAssign == numRows)
+		   numToSelect = numRows;
+	   else{
+		   pivotedMatrix = transpose(pivotedMatrix);
+		   transposed = true;
+		   numToSelect = numCols;
+	   }
+		  
+	   for(int i = 0;i < numToSelect;i++){
+		   int index = containsOneZero(pivotedMatrix[i]);
+	       
+		   if (index >= 0){
+			   selection[i][index]= 1;
+			   assignments[i] = index;
+		   }else if (index == -1){
+			   return null;
+		   }else if (index == -2){
+			   index = getAvailableZeroIndex(assignments,pivotedMatrix[i]);
+			   if(index == -1)
+				   return null;
+			   selection[i][index] = 1;
+			   assignments[i] = index;
+		   }
+		   
+	   }
+	   
+	   if(transposed)
+		   return transpose(selection);
+	   return selection;
+		
+	}
+	
+	/**
+	 * If the specified array contains a 0, return the index of the 
+	 * Occurrence of a 0. Return -1 if there are no zeroes. Return -2 if there are multiple zeroes
+	 * @param array the specified array
+	 * @return -2, if multiple zeroes, -1 if no zeroes, otherwise return the index of the zero.
+	 */
+	private int containsOneZero(int[] array){
+		
+		int index = -1;
+		boolean zeroFound = false;
+		
+		for(int i = 0; i < array.length;i++){
+			if(array[i] == 0){
+				if(zeroFound)
+				    return -2;
+				else{
+					index = i;
+					zeroFound = true;
+				}
+			}
+		}
+		
+		return index;
+	}
+	
+	/**
+	 * Return the index of the first zero in an array where you can
+	 * specify certain indices as invalid zeroes.
+	 * @param filledIndices specified invalid indices
+	 * @param array the array to check
+	 * @return the index of the first valid zero, -1 if no valid zeroes.
+	 */
+	private int getAvailableZeroIndex(int[] filledIndices, int[] array){
+		
+		boolean isAvailable = true;
+		
+		for(int i=0;i < array.length;i++){
+			
+			if(array[i] == 0){
+				isAvailable = true;
+				
+				for(int j=0; j < filledIndices.length;j++){
+					if(filledIndices[j] == i){
+						isAvailable = false;
+					}
+				}
+				if(isAvailable)
+					return i;
+			}
+			
+		}
+		
+		return -1;
 	}
 	
     /*
