@@ -13,7 +13,12 @@ models class and have decided to try implementing it.
 A more detialed description can be found here : 
 http://www.math.harvard.edu/archive/20_spring_05/handouts/assignment_overheads.pdf
 
-# TODO
-- Complete steps 3-5 of the algorithm
-- Make it more user friendly
-- According to wikipedia, it can be made to run in O(n^3). Mines currently runs in O(n^4).
+<h2> My Implementation </h2>
+
+With my implementation of the algorithm, you can easily solve assignment
+problems in O(N^4) time as opposed to O(2^N) time. Simply import the class
+and use the static methods. The two main methods you will use are hungarian_algorithm
+and hungarian_minCost, although I have also made many of the helper methods public
+in case you want to use them for some reason. My implementation currently works
+for matrices of size mxn where m <= n. If you have a matrix of size m > n, simply
+take the transpose of the matrix before and after using the algorithm.
