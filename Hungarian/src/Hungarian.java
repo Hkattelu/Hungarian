@@ -31,18 +31,22 @@ public class Hungarian {
 		matrix = transpose(matrix);
 		matrix = rowSubtract(matrix);
 		matrix = transpose(matrix);
-		
+
 		// Step 3: Try to cover all 0's using linesNeeded lines. If this fails, pivot
 		// if it works, then proceed to Step 5.
 		int[][] matrixCover = hungarian_Cover(matrix);
-		
+ 
 		// Step 4: Pivot the matrix by subtracting each uncovered element by
 		// the minimum uncovered element of that column. Also add that amount
 		// to elements that have been "double covered". Go back to Step 3.
 		while(!hungarian_isCovered(matrixCover)){
 			matrix = hungarian_pivot(matrix,matrixCover);
 			matrixCover = hungarian_Cover(matrix);
+			System.out.println(Arrays.deepToString(matrixCover));
+			System.exit(0);
 		}
+		
+		System.out.println(Arrays.deepToString(matrix));
 		
 		// Step 5: The matrix has now been "solved". Now we select a 0 from
 		// Each row such that each row and each column contains only one zero.
@@ -77,7 +81,7 @@ public class Hungarian {
 	 * @param array The specified array
 	 * @return the minimum element
 	 */
-	private int arrayMin(int[] array){
+	public int arrayMin(int[] array){
 		//Helper method for step 1
 		//Return Integer.MAX if the array is empty.
 		int min = Integer.MAX_VALUE;
@@ -176,7 +180,7 @@ public class Hungarian {
 	 * double cover it (2).
 	 * @param array The array to cover
 	 */
-	private void coverRow(int[] array){
+	public void coverRow(int[] array){
 		//Helper for hungarian_Cover
 		for(int i = 0;i < array.length;i++){
 			if(array[i] == 0)
@@ -193,7 +197,7 @@ public class Hungarian {
 	 * @param matrix the specified 2d array
 	 * @param col the specified column
 	 */
-	private void coverCol(int[][] matrix, int col){
+	public void coverCol(int[][] matrix, int col){
 		//Helper for hungarian_Cover
 		for(int i=0; i < matrix[0].length; i++){
 			if(matrix[i][col] == 0)
@@ -267,7 +271,7 @@ public class Hungarian {
 	 * @return the pivoted matrix
 	 */
 	public int[][] hungarian_pivot(int[][] matrix, int[][] cover){
-		
+
 		int minUncovered = Integer.MAX_VALUE;
 		//Find the minimum uncovered element
 		for(int i= 0;i < matrix.length;i++){
@@ -280,7 +284,7 @@ public class Hungarian {
 		for(int i= 0;i < matrix.length;i++){
 			for(int j=0;j < matrix[i].length;j++){
 				if(cover[i][j] == 0){
-					matrix[i][j] -= minUncovered;
+					matrix[i][j] -= minUncovered ;
 				}else if(cover[i][j] == 2){
 					matrix[i][j] += minUncovered;
 				}
@@ -349,7 +353,7 @@ public class Hungarian {
 	 * @param array the specified array
 	 * @return -2, if multiple zeroes, -1 if no zeroes, otherwise return the index of the zero.
 	 */
-	private int containsOneZero(int[] array){
+	public int containsOneZero(int[] array){
 		//Helper method for select
 		int index = -1;
 		boolean zeroFound = false;
@@ -375,7 +379,7 @@ public class Hungarian {
 	 * @param array the array to check
 	 * @return the index of the first valid zero, -1 if no valid zeroes.
 	 */
-	private int getAvailableZeroIndex(int[] filledIndices, int[] array){
+	public int getAvailableZeroIndex(int[] filledIndices, int[] array){
 		//Helper method for select
 		boolean isAvailable = true;
 		

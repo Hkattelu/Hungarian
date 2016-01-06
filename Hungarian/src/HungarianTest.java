@@ -34,12 +34,24 @@ public class HungarianTest {
 	}
 	
 	@Test
-	public void isCovered_test(){
+	public void isCovered_test1(){
 		Hungarian x = new Hungarian();
-		char[][] cover = {{'x','y','x'},{'x','y','y'},{'x','x','y'}};
-		//assertEquals(x.hungarian_isCovered(cover),true);
-		cover[2][2] = 'z';
-		//assertEquals(x.hungarian_isCovered(cover),false);
+		int[][] cover = {{1,2,1,2},{1,1,2,1},{1,1,2,1},{1,1,2,1}};
+		assertEquals(true,x.hungarian_isCovered(cover));
+	}
+	
+	@Test
+	public void isCovered_test2(){
+		Hungarian x = new Hungarian();
+		int[][] cover = {{0,0,1,0},{1,1,2,1},{1,1,2,1},{1,1,2,1}};
+		assertEquals(true,x.hungarian_isCovered(cover));
+	}
+	
+	@Test
+	public void isCovered_test3(){
+		Hungarian x = new Hungarian();
+		int[][] cover = {{0,0,1,0},{1,1,2,1},{0,0,1,0},{1,1,1,1}};
+		assertEquals(false,x.hungarian_isCovered(cover));
 	}
 	
 	@Test
@@ -65,8 +77,8 @@ public class HungarianTest {
 	public void selection_test2(){
 		// Switched up numbers,harder
 		Hungarian x = new Hungarian();
-		int[][] matrix = {{0,1,1,1},{0,1,1,0},{1,1,0,1},{1,0,0,0}};
-		int[][] selection = {{1,0,0,0},{0,0,0,1},{0,0,1,0},{0,1,0,0}};
+		int[][] matrix = {{70,0,5,0},{30,25,0,0},{85,0,0,5},{0,10,0,10}};
+		int[][] selection = {{0,0,0,1},{0,0,1,0},{0,1,0,0},{1,0,0,0}};
 		assertEquals(selection,x.hungarian_select(matrix));
 	}
 	
@@ -74,7 +86,7 @@ public class HungarianTest {
 	public void selection_test3(){
 		// Switched up more, harder than 2
 		Hungarian x = new Hungarian();
-		int[][] matrix = {{1,1,1,0},{0,1,1,0},{1,1,0,1},{1,0,1,0}};
+		int[][] matrix = {{42,30,7,0},{0,9,11,0},{21,251,0,1},{18,0,71,0}};
 		int[][] selection = {{0,0,0,1},{1,0,0,0},{0,0,1,0},{0,1,0,0}};
 		assertEquals(selection,x.hungarian_select(matrix));
 	}
@@ -123,7 +135,6 @@ public class HungarianTest {
 		Hungarian x = new Hungarian();
 		int[][] matrix= new int[][]{{0,0,1},{0,0,0},{7,0,2}};
 		int[][] cover = new int[][]{{1,2,1},{1,2,1},{0,1,0}};
-		System.out.println(Arrays.deepToString(x.hungarian_Cover(matrix)));
 		assertEquals(cover, x.hungarian_Cover(matrix));
 	}
 	
@@ -148,5 +159,31 @@ public class HungarianTest {
 		assertEquals(1,x.getLineDirection(matrix,1,1));
 	}
 	
+	@Test
+	public void hungarian_fulltest1(){
+		
+		Hungarian x = new Hungarian();
+		int[][] matrix = new int[][]{{90,75,75,80},{35,85,55,65},{125,95,90,105},{45,110,95,115}};
+		int[][] solution = new int[][]{{0,0,0,1},{0,0,1,0},{0,1,0,0},{1,0,0,0}};
+		int[][] algorithm = x.hungarian_algorithm(matrix);
+		assertEquals(solution,algorithm);
+		int cost = x.hungarian_minCost(matrix,algorithm);
+		assertEquals(275,cost);
+		
+		
+	}
 	
+	@Test
+	public void hungarian_fulltest2(){
+		
+		Hungarian x = new Hungarian();
+		int[][] matrix = new int[][]{{82,83,69,92},{77,37,49,92},{11,69,5,86},{8,9,98,23}};
+		int[][] solution = new int[][]{{0,0,1,0},{0,1,0,0},{1,0,0,0},{0,0,0,1}};
+		int[][] algorithm = x.hungarian_algorithm(matrix);
+		assertEquals(solution,algorithm);
+		int cost = x.hungarian_minCost(matrix,algorithm);
+		assertEquals(140,cost);
+		
+		
+	}
 }
