@@ -138,25 +138,87 @@ public class Hungarian {
 	 * @param matrix the matrix to cover
 	 * @return A matrix representing which elements have been covered.
 	 */
-	private int[][] hungarian_Cover(int[][] matrix){
+	public int[][] hungarian_Cover(int[][] matrix){
 		
-		char[][] cover = new char[matrix.length][matrix[0].length];
+		int[][] cover = new int[matrix.length][matrix[0].length];
 		int[] rowLines = new int[matrix.length];
 		int[] colLines = new int[matrix[0].length];
 		
 		for(int i=0; i < cover.length; i++){
 			for(int j=0; j < cover[i].length; j++){
-				if(matrix[i][j] == 0 && rowLines[i] == 0 && colLines[j] == 0){
-					cover[i][j] = 'x';
-					rowLines[i] = 1;
-					colLines[j] = 1;
-				} else if(matrix[i][j] == 0){
-					cover[i][j] = 'y';
-				}
+				int direction = getLineDirection(matrix,i,j);
+				if(direction == 1)
+					coverRow(cover[i]);
+				else if (direction == -1)
+					coverCol(cover,j);
 			}
 		}
 		
-		return null;
+		return cover;
+	}
+	
+	/**
+	 * Cover an array. If an element is already covered (1),
+	 * double cover it (2).
+	 * @param array The array to cover
+	 */
+	private void coverRow(int[] array){
+		//Helper for hungarian_Cover
+		for(int i = 0;i < array.length;i++){
+			if(array[i] == 0)
+				array[i] = 1;
+			else if(array[i] == 1)
+				array[i] = 2;
+		}
+		
+	}
+	
+	/**
+	 * Cover a specified column of a 2d array. If an element
+	 * is already covered (1), double cover it (2).
+	 * @param matrix the specified 2d array
+	 * @param col the specified column
+	 */
+	private void coverCol(int[][] matrix, int col){
+		//Helper for hungarian_Cover
+		for(int i=0; i < matrix[0].length; i++){
+			if(matrix[i][col] == 0)
+				matrix[i][col] = 1;
+			else if(matrix[i][col] == 1)
+				matrix[i][col] = 2;
+		}
+	}
+	
+	/**
+	 * Compare the number of zeroes in the column of an element and
+	 * the number of zeroes in the row that element.
+	 * @param matrix the matrix to check
+	 * @param row the row of the element to check
+	 * @param col the column of the element to check
+	 * @return -1 if the column has more 0s. 1 if the row has more or equal 0s. 0 if there
+	 * are no zeroes.
+	 */
+	private int getLineDirection(int[][] matrix, int row, int col){
+		//Helper for hungarian_Cover
+		int rowZeroes = 0;
+		int colZeroes = 0;
+		
+		for(int i = 0; i < matrix.length; i++){
+			if(matrix[i][col] == 0)
+					colZeroes++;
+		}
+		
+        for(int i = 0; i < matrix[0].length; i++){
+			if(matrix[row][i] == 0)
+				rowZeroes++;
+		}
+        
+        if(rowZeroes < colZeroes)
+        	return -1;
+        else if(rowZeroes == 0 && colZeroes == 0)
+        	return 0;
+        else
+        	return 1;
 	}
 	
 	/**

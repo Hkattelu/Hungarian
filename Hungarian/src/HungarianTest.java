@@ -97,4 +97,22 @@ public class HungarianTest {
 		assertEquals(selection,x.hungarian_select(matrix));
 	}
 
+	@Test
+	public void cover_test1(){
+		// One row, One column
+		Hungarian x = new Hungarian();
+		int[][] matrix= new int[][]{{3,0,3},{0,0,0},{3,0,3}};
+		int[][] cover = new int[][]{{0,1,0},{1,2,1},{0,1,0}};
+		assertEquals(cover, x.hungarian_Cover(matrix));
+	}
+	
+	@Test
+	public void cover_test2(){
+		// 1 Row, 2 columns
+		Hungarian x = new Hungarian();
+		int[][] matrix= new int[][]{{0,0,1},{0,0,0},{0,0,2}};
+		int[][] cover = new int[][]{{1,1,0},{2,2,1},{1,1,0}};
+		assertEquals(cover, x.hungarian_Cover(matrix));
+	}
+	
 }
