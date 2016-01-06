@@ -108,11 +108,45 @@ public class HungarianTest {
 	
 	@Test
 	public void cover_test2(){
+
 		// 1 Row, 2 columns
 		Hungarian x = new Hungarian();
 		int[][] matrix= new int[][]{{0,0,1},{0,0,0},{0,0,2}};
 		int[][] cover = new int[][]{{1,1,0},{2,2,1},{1,1,0}};
+        assertEquals(cover, x.hungarian_Cover(matrix));
+	}
+	
+	@Test
+	public void cover_test3(){
+
+		// 2 Rows, 1 column
+		Hungarian x = new Hungarian();
+		int[][] matrix= new int[][]{{0,0,1},{0,0,0},{7,0,2}};
+		int[][] cover = new int[][]{{1,2,1},{1,2,1},{0,1,0}};
+		System.out.println(Arrays.deepToString(x.hungarian_Cover(matrix)));
 		assertEquals(cover, x.hungarian_Cover(matrix));
 	}
+	
+	@Test
+	public void lineDirection_test1(){
+		Hungarian x = new Hungarian();
+		int[][] matrix = new int[][]{{1,0,2},{3,0,0},{4,0,6}};
+		assertEquals(-1,x.getLineDirection(matrix,1,1));
+	}
+	
+	@Test
+	public void lineDirection_test2(){
+		Hungarian x = new Hungarian();
+		int[][] matrix = new int[][]{{1,3,2},{7,4,9},{4,3,6}};
+		assertEquals(0,x.getLineDirection(matrix,1,1));
+	}
+	
+	@Test
+	public void lineDirection_test3(){
+		Hungarian x = new Hungarian();
+		int[][] matrix = new int[][]{{1,4,2},{0,0,0},{4,0,6}};
+		assertEquals(1,x.getLineDirection(matrix,1,1));
+	}
+	
 	
 }

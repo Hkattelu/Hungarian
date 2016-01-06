@@ -141,19 +141,33 @@ public class Hungarian {
 	public int[][] hungarian_Cover(int[][] matrix){
 		
 		int[][] cover = new int[matrix.length][matrix[0].length];
-		int[] rowLines = new int[matrix.length];
-		int[] colLines = new int[matrix[0].length];
+		int[] rowsCovered = new int[matrix.length];
+		int[] colsCovered = new int[matrix[0].length];
+		
 		
 		for(int i=0; i < cover.length; i++){
 			for(int j=0; j < cover[i].length; j++){
+			  if(matrix[i][j] == 0){	
 				int direction = getLineDirection(matrix,i,j);
-				if(direction == 1)
-					coverRow(cover[i]);
-				else if (direction == -1)
-					coverCol(cover,j);
+				if(direction == 1){
+					
+					if(rowsCovered[i] == 0){
+					   coverRow(cover[i]);
+					   rowsCovered[i]++;
+					}
+					
+				} else if (direction == -1){
+					
+					if(colsCovered[j] == 0){
+					   coverCol(cover,j);	
+					   colsCovered[j]++;
+					}
+					
+				} 					
+			  }
 			}
 		}
-		
+
 		return cover;
 	}
 	
@@ -195,10 +209,11 @@ public class Hungarian {
 	 * @param matrix the matrix to check
 	 * @param row the row of the element to check
 	 * @param col the column of the element to check
-	 * @return -1 if the column has more 0s. 1 if the row has more or equal 0s. 0 if there
-	 * are no zeroes.
+	 * @return 0 if there are no zeroes in the row or column
+	 *         1 if there are more zeroes in the row and there are some( or and equal number ) in the column
+	 *         -1 if there are more zeroes in the column and there are some in the row
 	 */
-	private int getLineDirection(int[][] matrix, int row, int col){
+	public int getLineDirection(int[][] matrix, int row, int col){
 		//Helper for hungarian_Cover
 		int rowZeroes = 0;
 		int colZeroes = 0;
@@ -213,12 +228,15 @@ public class Hungarian {
 				rowZeroes++;
 		}
         
-        if(rowZeroes < colZeroes)
-        	return -1;
-        else if(rowZeroes == 0 && colZeroes == 0)
+        if(rowZeroes == 0 && colZeroes == 0)
         	return 0;
-        else
-        	return 1;
+        if(rowZeroes >= colZeroes){
+            return 1;        				
+        }else{
+        	return -1;
+        }
+        	
+        
 	}
 	
 	/**
