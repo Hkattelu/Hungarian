@@ -10,6 +10,25 @@ import java.util.Arrays;
 
 public class Hungarian {
 
+	public class coveredMatrix{
+	   
+		/*
+		 * A matrix representing lines covering a matrix.A 1 means
+		 * there is a single line going through that element and a
+		 * 2 means there are two lines going through it. A 0 means
+		 * there are no lines going through.
+		 */
+		public int[][] cover;
+		
+		/** The minimum number of lines needed to cover this matrix **/
+		public int lineCover;
+		
+		public coveredMatrix(int[][] matrix, int lines){
+			lineCover = lines;
+			cover = matrix;
+		}
+	}
+	
 	/**
 	 * Performs Hungarian algorithm on a 2D matrix
 	 * @param data : The matrix to perform the algorithm on
@@ -20,38 +39,44 @@ public class Hungarian {
 	 * 
 	 */
 	public int[][] hungarian_algorithm(int[][] data){
-		int[][] matrix = data;
-		int linesNeeded = Math.min(matrix.length,matrix[0].length);
+		
+		//There was some error where only the reference was being copied
+		//and not the actual matrix, so we do it manually.
+		int[][] mat = new int[data.length][data[0].length];
+		
+		for(int i = 0; i < mat.length; i++){
+			for(int j = 0; j < mat[0].length; j++){
+				mat[i][j]= data[i][j];
+			}
+		}
+		
+		int linesNeeded = Math.min(mat.length,mat[0].length);
 		
 		// Step 1: Subtract each row by the minimum element in that row.
-		matrix = rowSubtract(matrix);
+		mat = rowSubtract(mat);
 		
 		// Step 2: Subtract each column by the minimum element in that column.
 		// NOTE: Applying row subtract on the transpose is the same operation
-		matrix = transpose(matrix);
-		matrix = rowSubtract(matrix);
-		matrix = transpose(matrix);
+		mat = transpose(mat);
+		mat = rowSubtract(mat);
+		mat = transpose(mat);
 
 		// Step 3: Try to cover all 0's using linesNeeded lines. If this fails, pivot
 		// if it works, then proceed to Step 5.
-		int[][] matrixCover = hungarian_Cover(matrix);
+		coveredMatrix matrixCover = hungarian_Cover(mat);
  
 		// Step 4: Pivot the matrix by subtracting each uncovered element by
 		// the minimum uncovered element of that column. Also add that amount
 		// to elements that have been "double covered". Go back to Step 3.
-		while(!hungarian_isCovered(matrixCover)){
-			matrix = hungarian_pivot(matrix,matrixCover);
-			matrixCover = hungarian_Cover(matrix);
-			System.out.println(Arrays.deepToString(matrixCover));
-			System.exit(0);
+		while(!hungarian_isFullyCovered(matrixCover)){
+			mat = hungarian_pivot(mat,matrixCover.cover);
+			matrixCover = hungarian_Cover(mat);
 		}
-		
-		System.out.println(Arrays.deepToString(matrix));
 		
 		// Step 5: The matrix has now been "solved". Now we select a 0 from
 		// Each row such that each row and each column contains only one zero.
 		// Replace those zeroes with 1's and turn all other elements to 0's.
-		return hungarian_select(matrix);
+		return hungarian_select(mat);
 
 	}
 	
@@ -142,12 +167,11 @@ public class Hungarian {
 	 * @param matrix the matrix to cover
 	 * @return A matrix representing which elements have been covered.
 	 */
-	public int[][] hungarian_Cover(int[][] matrix){
+	public coveredMatrix hungarian_Cover(int[][] matrix){
 		
 		int[][] cover = new int[matrix.length][matrix[0].length];
 		int[] rowsCovered = new int[matrix.length];
 		int[] colsCovered = new int[matrix[0].length];
-		
 		
 		for(int i=0; i < cover.length; i++){
 			for(int j=0; j < cover[i].length; j++){
@@ -171,8 +195,18 @@ public class Hungarian {
 			  }
 			}
 		}
+		int totalLines = 0;
+		for(int i = 0;i < rowsCovered.length;i++){
+			if(rowsCovered[i]==1)
+				totalLines++;
+		}
+		for(int i = 0;i < colsCovered.length;i++){
+			if(colsCovered[i]==1)
+				totalLines++;
+		}
 
-		return cover;
+
+		return new coveredMatrix(cover,totalLines);
 	}
 	
 	/**
@@ -250,14 +284,9 @@ public class Hungarian {
 	 * @param matrix the matrix to check
 	 * @return True if it is fully covered. False otherwise.
 	 */
-	public boolean hungarian_isCovered(int[][] matrix){
-        for(int i = 0;i< matrix.length;i++){
-        	for(int j = 0;j< matrix[i].length;j++){
-        		if(matrix[i][j] == 0)
-        			return false;
-        	}
-        }
-        return true;
+	public boolean hungarian_isFullyCovered(coveredMatrix matrix){
+		
+        return matrix.lineCover == Math.min(matrix.cover.length, matrix.cover[0].length);
 
 	}
 	

@@ -34,27 +34,6 @@ public class HungarianTest {
 	}
 	
 	@Test
-	public void isCovered_test1(){
-		Hungarian x = new Hungarian();
-		int[][] cover = {{1,2,1,2},{1,1,2,1},{1,1,2,1},{1,1,2,1}};
-		assertEquals(true,x.hungarian_isCovered(cover));
-	}
-	
-	@Test
-	public void isCovered_test2(){
-		Hungarian x = new Hungarian();
-		int[][] cover = {{0,0,1,0},{1,1,2,1},{1,1,2,1},{1,1,2,1}};
-		assertEquals(true,x.hungarian_isCovered(cover));
-	}
-	
-	@Test
-	public void isCovered_test3(){
-		Hungarian x = new Hungarian();
-		int[][] cover = {{0,0,1,0},{1,1,2,1},{0,0,1,0},{1,1,1,1}};
-		assertEquals(false,x.hungarian_isCovered(cover));
-	}
-	
-	@Test
 	public void pivot_test(){
 		Hungarian x = new Hungarian();
 		int[][] matrix = {{13,14,0,8},{40,0,12,40},{6,64,0,66},{0,1,90,0}};
@@ -115,7 +94,7 @@ public class HungarianTest {
 		Hungarian x = new Hungarian();
 		int[][] matrix= new int[][]{{3,0,3},{0,0,0},{3,0,3}};
 		int[][] cover = new int[][]{{0,1,0},{1,2,1},{0,1,0}};
-		assertEquals(cover, x.hungarian_Cover(matrix));
+		assertEquals(cover, x.hungarian_Cover(matrix).cover);
 	}
 	
 	@Test
@@ -125,7 +104,7 @@ public class HungarianTest {
 		Hungarian x = new Hungarian();
 		int[][] matrix= new int[][]{{0,0,1},{0,0,0},{0,0,2}};
 		int[][] cover = new int[][]{{1,1,0},{2,2,1},{1,1,0}};
-        assertEquals(cover, x.hungarian_Cover(matrix));
+        assertEquals(cover, x.hungarian_Cover(matrix).cover);
 	}
 	
 	@Test
@@ -135,7 +114,7 @@ public class HungarianTest {
 		Hungarian x = new Hungarian();
 		int[][] matrix= new int[][]{{0,0,1},{0,0,0},{7,0,2}};
 		int[][] cover = new int[][]{{1,2,1},{1,2,1},{0,1,0}};
-		assertEquals(cover, x.hungarian_Cover(matrix));
+		assertEquals(cover, x.hungarian_Cover(matrix).cover);
 	}
 	
 	@Test
@@ -183,7 +162,6 @@ public class HungarianTest {
 		assertEquals(solution,algorithm);
 		int cost = x.hungarian_minCost(matrix,algorithm);
 		assertEquals(140,cost);
-		
-		
+	
 	}
 }
