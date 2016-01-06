@@ -14,7 +14,7 @@ public class Hungarian {
 	 * A class whose objects represent matrices that have been covered
 	 * in the fashion of the hungarian method's 3rd step.
 	 */
-	public class coveredMatrix{
+	public static class coveredMatrix{
 	   
 		/*
 		 * A matrix representing lines covering a matrix.A 1 means
@@ -42,7 +42,7 @@ public class Hungarian {
 	 * columns in data. All other elements in the returned matrix will be 0.
 	 * 
 	 */
-	public int[][] hungarian_algorithm(int[][] data){
+	public static int[][] hungarian_algorithm(int[][] data){
 		
 		//There was some error where only the reference was being copied
 		//and not the actual matrix, so we do it manually.
@@ -93,7 +93,7 @@ public class Hungarian {
 	 * @param assignment The assignment solution
 	 * @return The cost of the optimal assignments in matrix
 	 */
-	public int hungarian_minCost(int[][] matrix, int[][] assignment){
+	public static int hungarian_minCost(int[][] matrix, int[][] assignment){
 	  int cost = 0;
 	  for(int i=0;i<matrix.length;i++){
 		  for(int j=0;j<matrix[0].length;j++){
@@ -112,7 +112,7 @@ public class Hungarian {
 	 * @param array The specified array
 	 * @return the minimum element
 	 */
-	public int arrayMin(int[] array){
+	public static int arrayMin(int[] array){
 		//Helper method for step 1
 		//Return Integer.MAX if the array is empty.
 		int min = Integer.MAX_VALUE;
@@ -131,7 +131,7 @@ public class Hungarian {
 	 * @param matrix : the matrix to operate on
 	 * @return the matrix after subtractions
 	 */
-	public int[][] rowSubtract(int[][] matrix){
+	public static int[][] rowSubtract(int[][] matrix){
 		//Helper method for step 1
 		// Subtract each row by the minimum element in that row.
 		for(int i=0;i < matrix.length;i++){
@@ -151,7 +151,7 @@ public class Hungarian {
 	 * @param matrix : the matrix to transpose
 	 * @return the transposed matrix
 	 */
-	public int[][] transpose(int[][] matrix){
+	public static int[][] transpose(int[][] matrix){
 		//Helper method
 		int[][] transposed = new int[matrix[0].length][matrix.length];
 		
@@ -173,7 +173,7 @@ public class Hungarian {
 	 * @param matrix the matrix to cover
 	 * @return A matrix representing which elements have been covered.
 	 */
-	public coveredMatrix hungarian_Cover(int[][] matrix){
+	public static coveredMatrix hungarian_Cover(int[][] matrix){
 		
 		int[][] cover = new int[matrix.length][matrix[0].length];
 		int[] rowsCovered = new int[matrix.length];
@@ -220,7 +220,7 @@ public class Hungarian {
 	 * double cover it (2).
 	 * @param array The array to cover
 	 */
-	public void coverRow(int[] array){
+	public static void coverRow(int[] array){
 		//Helper for hungarian_Cover
 		for(int i = 0;i < array.length;i++){
 			if(array[i] == 0)
@@ -237,7 +237,7 @@ public class Hungarian {
 	 * @param matrix the specified 2d array
 	 * @param col the specified column
 	 */
-	public void coverCol(int[][] matrix, int col){
+	public static void coverCol(int[][] matrix, int col){
 		//Helper for hungarian_Cover
 		for(int i=0; i < matrix[0].length; i++){
 			if(matrix[i][col] == 0)
@@ -257,7 +257,7 @@ public class Hungarian {
 	 *         1 if there are more zeroes in the row and there are some( or and equal number ) in the column
 	 *         -1 if there are more zeroes in the column and there are some in the row
 	 */
-	public int getLineDirection(int[][] matrix, int row, int col){
+	public static int getLineDirection(int[][] matrix, int row, int col){
 		//Helper for hungarian_Cover
 		int rowZeroes = 0;
 		int colZeroes = 0;
@@ -290,7 +290,7 @@ public class Hungarian {
 	 * @param matrix the matrix to check
 	 * @return True if it is fully covered. False otherwise.
 	 */
-	public boolean hungarian_isFullyCovered(coveredMatrix matrix){
+	public static boolean hungarian_isFullyCovered(coveredMatrix matrix){
 		
         return matrix.lineCover == Math.min(matrix.cover.length, matrix.cover[0].length);
 
@@ -305,7 +305,7 @@ public class Hungarian {
 	 * @param cover The matrix representing how the lines covered the matrix elements
 	 * @return the pivoted matrix
 	 */
-	public int[][] hungarian_pivot(int[][] matrix, int[][] cover){
+	public static int[][] hungarian_pivot(int[][] matrix, int[][] cover){
 
 		int minUncovered = Integer.MAX_VALUE;
 		//Find the minimum uncovered element
@@ -340,7 +340,7 @@ public class Hungarian {
 	 * @param filledRows use empty array for this. 
 	 * @return If an element has been selected.
 	 */
-	public boolean hungarian_select(int[][] pivotedMatrix, int[][] selection, int[] filledRows, int row){
+	public static boolean hungarian_select(int[][] pivotedMatrix, int[][] selection, int[] filledRows, int row){
 		
        if (row == pivotedMatrix.length)
     	   return true;
@@ -367,7 +367,7 @@ public class Hungarian {
 	 * @param array the specified array
 	 * @return -2, if multiple zeroes, -1 if no zeroes, otherwise return the index of the zero.
 	 */
-	public int containsOneZero(int[] array){
+	public static int containsOneZero(int[] array){
 		//Helper method for select
 		int index = -1;
 		boolean zeroFound = false;
@@ -393,7 +393,7 @@ public class Hungarian {
 	 * @param array the array to check
 	 * @return the index of the first valid zero, -1 if no valid zeroes.
 	 */
-	public int getAvailableZeroIndex(int[] filledIndices, int[] array){
+	public static int getAvailableZeroIndex(int[] filledIndices, int[] array){
 		//Helper method for select
 		boolean isAvailable = true;
 		
