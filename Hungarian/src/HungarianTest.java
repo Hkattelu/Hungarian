@@ -49,7 +49,10 @@ public class HungarianTest {
 		Hungarian x = new Hungarian();
 		int[][] matrix = {{0,1,1,1},{1,0,1,1},{1,1,0,1},{1,1,1,0}};
 		int[][] selection = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
-		assertEquals(selection,x.hungarian_select(matrix));
+		int[][] answer = new int[4][4];
+		assertEquals(true,x.hungarian_select(matrix, answer, new int[4],0));
+		System.out.println(Arrays.deepToString(answer));
+		assertEquals(selection,answer);
 	}
 	
 	@Test
@@ -58,7 +61,9 @@ public class HungarianTest {
 		Hungarian x = new Hungarian();
 		int[][] matrix = {{70,0,5,0},{30,25,0,0},{85,0,0,5},{0,10,0,10}};
 		int[][] selection = {{0,0,0,1},{0,0,1,0},{0,1,0,0},{1,0,0,0}};
-		assertEquals(selection,x.hungarian_select(matrix));
+		int[][] answer = new int[4][4];
+		assertEquals(true,x.hungarian_select(matrix, answer, new int[4],0));
+		assertEquals(selection,answer);
 	}
 	
 	@Test
@@ -67,7 +72,9 @@ public class HungarianTest {
 		Hungarian x = new Hungarian();
 		int[][] matrix = {{42,30,7,0},{0,9,11,0},{21,251,0,1},{18,0,71,0}};
 		int[][] selection = {{0,0,0,1},{1,0,0,0},{0,0,1,0},{0,1,0,0}};
-		assertEquals(selection,x.hungarian_select(matrix));
+		int[][] answer = new int[4][4];
+		assertEquals(true,x.hungarian_select(matrix, answer, new int[4],0));
+		assertEquals(selection,answer);
 	}
 	
 	@Test
@@ -76,7 +83,9 @@ public class HungarianTest {
 		Hungarian x = new Hungarian();
 		int[][] matrix = {{1,1,1,0},{0,1,1,0},{1,1,0,1}};
 		int[][] selection = {{0,0,0,1},{1,0,0,0},{0,0,1,0}};
-      	assertEquals(selection,x.hungarian_select(matrix));
+		int[][] answer = new int[3][4];
+		assertEquals(true,x.hungarian_select(matrix, new int[3][4], new int[3],0));
+		assertEquals(selection,answer);
 	}
 	
 	@Test
@@ -85,7 +94,9 @@ public class HungarianTest {
 		Hungarian x = new Hungarian();
 		int[][] matrix = {{1,0,1},{0,1,1},{1,1,0},{1,0,1}};
 		int[][] selection = {{0,1,0},{1,0,0},{0,0,1},{0,0,0}};
-		assertEquals(selection,x.hungarian_select(matrix));
+		int[][] answer = new int[4][3];
+		assertEquals(true,x.hungarian_select(matrix, new int[4][3], new int[4],0));
+		assertEquals(selection,answer);
 	}
 
 	@Test

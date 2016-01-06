@@ -10,6 +10,10 @@ import java.util.Arrays;
 
 public class Hungarian {
 
+	/*
+	 * A class whose objects represent matrices that have been covered
+	 * in the fashion of the hungarian method's 3rd step.
+	 */
 	public class coveredMatrix{
 	   
 		/*
@@ -72,11 +76,12 @@ public class Hungarian {
 			mat = hungarian_pivot(mat,matrixCover.cover);
 			matrixCover = hungarian_Cover(mat);
 		}
-		
 		// Step 5: The matrix has now been "solved". Now we select a 0 from
 		// Each row such that each row and each column contains only one zero.
 		// Replace those zeroes with 1's and turn all other elements to 0's.
-		return hungarian_select(mat);
+		int[][] selection = new int[mat.length][mat[0].length];
+		hungarian_select(mat,selection,new int[mat.length],0);
+		return selection;
 
 	}
 	
@@ -329,50 +334,29 @@ public class Hungarian {
 	 *  returns a matrix with  a 1 in position i,j if worker i has been assigned
 	 *  to job j. All other elements will be 0.
 	 * @param pivotedMatrix The fully pivoted matrix
-	 * @return The assignment matrix
+	 * @param selection Use an empty matrix for this.
+	 * @param row Always use 0 for this. Recursion is used.
+	 * @param filledRows use empty array for this. 
+	 * @return If an element has been selected.
 	 */
-	public int[][] hungarian_select(int[][] pivotedMatrix){
+	public boolean hungarian_select(int[][] pivotedMatrix, int[][] selection, int[] filledRows, int row){
 		
-	   int numCols = pivotedMatrix.length;
-	   int numRows = pivotedMatrix[0].length;
-	   int[][] selection = new int[numCols][numRows];
-
-	   int numToSelect = numCols;
-	   int[] assignments = new int[numToSelect];
-	  
-	   for(int i=0;i<numToSelect;i++){
-		   assignments[i] = -1;
-	   }
-		  
-	   for(int i = 0;i < numToSelect;i++){
-		   int index = containsOneZero(pivotedMatrix[i]);
-	       
-		   if (index >= 0){
-			   boolean canSelect = true;
-			   for(int j=0; j<assignments.length;j++){
-				   if(assignments[j] == index)
-					   canSelect = false;
-			   }
-			   if(canSelect){
-			     selection[i][index]= 1;
-			     assignments[i] = index;
-			   }
-			   
-		   }else if (index == -1){
-			   //Do nothing
-		   }else if (index == -2){
-			   index = getAvailableZeroIndex(assignments,pivotedMatrix[i]);
-			   if(index == -1){
-			   	   return null;
-			   }else{
-				   selection[i][index] = 1;
-				   assignments[i] = index;
-			   }
+       if (row == filledRows.length)
+    	   return true;
+       
+	   for(int i = 0; i < pivotedMatrix[row].length; i++){
+		   if(pivotedMatrix[row][i] == 0 && filledRows[i] == 0){
+			   selection[row][i] = 1;
+			   filledRows[i] = 1;
+			   if(hungarian_select(pivotedMatrix,selection,filledRows,row+1))
+				   return true;
+			   selection[row][i] = 0;
+			   filledRows[i] = 0;
+					   
 		   }
-		   
 	   }
-
-	   return selection;
+	   
+	   return false;
 		
 	}
 	
