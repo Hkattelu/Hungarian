@@ -80,7 +80,8 @@ public class Hungarian {
 		// Each row such that each row and each column contains only one zero.
 		// Replace those zeroes with 1's and turn all other elements to 0's.
 		int[][] selection = new int[mat.length][mat[0].length];
-		hungarian_select(mat,selection,new int[mat.length],0);
+		System.out.println(Arrays.deepToString(mat));
+		hungarian_select(mat,selection,new int[mat[0].length],0);
 		return selection;
 
 	}
@@ -341,7 +342,7 @@ public class Hungarian {
 	 */
 	public boolean hungarian_select(int[][] pivotedMatrix, int[][] selection, int[] filledRows, int row){
 		
-       if (row == filledRows.length)
+       if (row == pivotedMatrix.length)
     	   return true;
        
 	   for(int i = 0; i < pivotedMatrix[row].length; i++){
